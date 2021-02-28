@@ -15,13 +15,15 @@ export default AddButton = ({ navigation }) => {
 
     const Buttons = ({ title, icon, onPress }) => {
         return (
-            <TouchableOpacity style={{ flex: 1, backgroundColor: color.grey100, borderRadius: 8, marginHorizontal: 4, justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}
+            <TouchableOpacity style={{ flex: 1, justifyContent: 'center', alignItems: 'center', flexDirection: 'column', }}
                 onPress={() => {
                     onPress()
                     dispatch(disMis())
                 }}>
-                <IconX name={icon} origin={ICON_TYPE.FONT_AWESOME5} size={metrics.icons.small} color={color.tint} />
-                <Text style={{ color: color.tint, marginStart: 8 }}>{title}</Text>
+                <View style={{ backgroundColor: color.tint, width: 50, height: 50, borderRadius: 25, overflow: 'hidden', justifyContent: 'center', alignItems: 'center', }} >
+                    <IconX name={icon} origin={ICON_TYPE.FONT_AWESOME5} size={metrics.icons.small} color={color.white} />
+                </View>
+                <Text style={{ color: color.gray, }}>{title}</Text>
             </TouchableOpacity>)
     }
 
@@ -29,13 +31,13 @@ export default AddButton = ({ navigation }) => {
         return (
 
             <View style={{ position: 'absolute', width: '100%', height: 60, flexDirection: 'row', bottom: 60 + insets.bottom }}>
-                <Buttons title={'Scan QR Code'} icon={'qrcode'} onPress={() => {
+                <Buttons title={'New Movie'} icon={'film'} onPress={() => {
                     // dispatch(setOrderType(orderTypes.dine_in))
-                    // navigation.navigate(strings.scanner)
+                     navigation.navigate("newMovie")
                 }} />
-                <Buttons title={'Order for Collection'} icon={'walking'} onPress={() => {
+                <Buttons title={'New Person'} icon={'users'} onPress={() => {
                     // dispatch(setOrderType(orderTypes.collection))
-                    // navigation.navigate(strings.stores)
+                    navigation.navigate("newPerson")
                 }} />
             </View>
         )

@@ -18,6 +18,8 @@ export const Button = ({ buttonTitle, isLoading, style, onPress }) => {
 
 
 
+
+
 const styles = StyleSheet.create({
     continer: {
         backgroundColor: color.tint,

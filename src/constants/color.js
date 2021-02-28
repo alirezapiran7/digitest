@@ -11,7 +11,7 @@ const color = {
     hint: '#808080',
     text: '#293341',
     header: '#ffffff',
-    background_screen: '#ffffff',
+    background_screen: '#f5f5f5',
 
     transparent: 'rgba(0,0,0,0)',
     background: '#ffffff',

@@ -26,9 +26,10 @@ const index = () => {
                 animationIn={'fadeIn'}
                 statusBarTranslucent={true}
                 isVisible={isVisible}
+                
                 customBackdrop={
                     <TouchableWithoutFeedback onPress={() => {
-                        if (isCancel)
+                       
                             dispatch(disMis())
                     }}>
 

@@ -12,24 +12,22 @@ import { urls } from '../../constants';
 import { disMis, globalEndLoading, globalStartLoading, showAlert } from './actionsModal';
 import { logout } from './actionsAuth';
 import axios from 'axios';
+import { Alert } from 'react-native';
 
-export const Get = ({ model, body, id, result, isLoading }) => async dispatch => {
+export const Get = ({url, result, isLoading }) => async dispatch => {
 
     try {
-        let url = urls.baseApi + model
-        if (id) url += '/' + id
-        if (body) url += '?' + body
-        console.log(url);
-
         if (isLoading) dispatch(globalStartLoading())
 
         const token = await AsyncStorage.getItem("token")
+        console.log(token);
         const res = await axios({
             method: 'GET',
             url: url,
             headers: { 'Accept': 'application/json', 'token': token },
         });
 
+        console.log("get movies",res.data);
         return dispatch({
             type: API_GET,
             value: res.data.results,
@@ -50,11 +48,9 @@ export const Get = ({ model, body, id, result, isLoading }) => async dispatch =>
     }
 }
 
-export const Create = ({ model, data, result, isLoading }) => async dispatch => {
+export const Create = ({ url, data, result, isLoading }) => async dispatch => {
 
     try {
-        let url = urls.baseApi + model
-
         if (isLoading) dispatch(globalStartLoading())
 
         const token = await AsyncStorage.getItem('token')
