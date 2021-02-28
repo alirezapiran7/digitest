@@ -13,25 +13,27 @@ import axios from 'axios';
 
 export const login = ({ username, password, navigation }) => async dispatch => {
   try {
-    let url = urls.login
     dispatch(startLoading())
 
     const res = await axios({
       method: 'post',
-      url: url,
-      headers: { 'Accept': 'application/json', 'token': token },
+      url: urls.login,
+      headers: { 'Accept': 'application/json' },
       data: { username, password }
     });
-
-    console.log('login user');
-    console.log(res.data);
-
+    
     await AsyncStorage.setItem('token', res.data.token)
+    navigation.replace("main")
+    console.log("loged in",res.data.token);
+  } catch (err) {
+    dispatch(showAlert({ action: () => dispatch(disMis()), title: err.message }))
+  } finally {
+    dispatch(endLoading())
+  }
+}
 
-    // dispatch({
-    //   type: GET_TRANSACTIONS,
-    //   value: res.data.user,
-    // })
+export const getUser = ({ navigation }) => async dispatch => {
+  try {
     navigation.replace("main")
   } catch (err) {
     dispatch(showAlert({ action: () => dispatch(disMis()), title: err.message }))

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { ActivityIndicator, StyleSheet, Text, View, TouchableWithoutFeedback } from 'react-native'
-// import Navigation from './navigation'
+import Navigation from './navigation'
 import Modal from 'react-native-modal'
 import { useSelector, useDispatch } from 'react-redux'
 import { color } from './constants'; 
@@ -44,9 +44,8 @@ const index = () => {
 
             </Modal>
 
-            {/* <Navigation /> */}
-            <View style={{backgroundColor:color.red100,flex:1}}></View>
-
+            <Navigation />
+            
             {isLoading && <ActivityIndicator animating={isLoading}
                 size={'large'}
                 style={{

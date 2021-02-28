@@ -8,7 +8,7 @@ import {
   DISMIS_MODAL,
   
 } from './actionType';
-// import Alert from '../../components/Alert'
+ import Alert from '../../components/Alert'
 
 
 
@@ -18,7 +18,7 @@ export const showAlert = ({action,title='NetWork Error'})=> async dispatch => {
     value: {
       isVisible: true,
       isCancel:true,
-      // component:()=>Alert({title:title,message:'',actions:[{action:action,title:'Ok'}]}),
+       component:()=>Alert({title:title,message:'',actions:[{action:action,title:'Ok'}]}),
       transparent:false,
       animationType:'slide',
     }
