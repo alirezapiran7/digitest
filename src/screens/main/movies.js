@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import { Alert, FlatList, StyleSheet, TouchableOpacity, View } from 'react-native'
+import { Alert, FlatList, KeyboardAvoidingView, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native'
 import { color, urls } from '../../constants'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import Text from '../../components/Text'
 import { IconX, ICON_TYPE } from '../../icons'
 import { Get } from '../../redux/actions/actionsApi'
 import { useSelector, useDispatch } from 'react-redux'
+import {Rating} from 'react-native-ratings'
 
 const movies = ({ navigation }) => {
     const insets = useSafeAreaInsets()
@@ -37,7 +38,7 @@ const movies = ({ navigation }) => {
 
                         <View style={{ flexDirection: 'row', }}>
                             <IconX size={50} name={"image"} style={{ borderRadius: 8 }} />
-                            <View style={{ flex: 1,marginStart:4 }}>
+                            <View style={{ flex: 1, marginStart: 4 }}>
 
                                 <View style={{ flex: 1, justifyContent: 'space-between', flexDirection: 'row' }}>
                                     <Text numberOfLines={1} ellipsizeMode='tail' style={{ flex: 1, fontSize: 16, fontWeight: 'bold' }}>{item.title}</Text>
@@ -46,25 +47,36 @@ const movies = ({ navigation }) => {
 
                                 <View style={{ flex: 1, justifyContent: 'space-between', flexDirection: 'row' }}>
                                     <Text>{item?.director.split(":")[1]}</Text>
-                                    <Text style={{ width: 80 }} >{item.date_of_release}</Text>
+                                    <Rating
+                                        type='custom'
+                                        ratingCount={5}
+                                        imageSize={10}
+                                        readonly={true}
+                                        startingValue={item.rating}
+                                        ratingColor={color.yellow800}
+
+                                    />
                                 </View>
 
                             </View>
                         </View>
-                        <View style={{flexDirection:'row',alignItems:'center'}}>
-                            <View style={{ flex: 1, flexDirection: 'row' }}>
+                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                            <View style={{ flex: 1, flexDirection: 'row', flexWrap: 'wrap' }}>
                                 {item.tags.map(item => (
                                     <View style={{ borderRadius: 8, height: 25, backgroundColor: color.grey100, justifyContent: 'center', alignItems: 'center', margin: 4, padding: 4 }}>
                                         <Text>{item}</Text>
                                     </View>
                                 ))}
                             </View>
-                            <View style={{ flexDirection: 'row'}}>
-                                <TouchableOpacity style={{width:30, height:30,alignItems:'center',justifyContent:'center',marginHorizontal:4}}>
-                                    <IconX name={"edit"} color={color.tint} />
+                            <View style={{ flexDirection: 'row', width: 80 }}>
+                                <TouchableOpacity style={{ width: 30, height: 30, alignItems: 'center', justifyContent: 'center', marginHorizontal: 4 }}
+                                onPress={()=>{
+                                    navigation.navigate("editMovie",{movieId:item.id})
+                                }}>
+                                    <IconX name={"edit"} color={color.tint}  />
                                 </TouchableOpacity>
-                                <TouchableOpacity style={{width:30, height:30,alignItems:'center',justifyContent:'center',marginHorizontal:4}}>
-                                    <IconX name={"trash"} color={color.tint}/>
+                                <TouchableOpacity style={{ width: 30, height: 30, alignItems: 'center', justifyContent: 'center', marginHorizontal: 4 }}>
+                                    <IconX name={"trash"} color={color.tint} />
                                 </TouchableOpacity>
                             </View>
                         </View>

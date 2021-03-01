@@ -9,11 +9,11 @@ import { useDispatch, useSelector } from 'react-redux'
 
 const index = ({ navigation }) => {
 
-    const [userName, setUserName] = useState('')
-    const [password, setPassword] = useState('')
+    const [userName, setUserName] = useState('hriks')
+    const [password, setPassword] = useState('gt4043@1')
     const dispatch = useDispatch()
     const isLoading = useSelector(state => state.modal.isLoading)
-
+    
     return (
         <View style={styles.container}>
             <KeyboardAvoidingView style={{ flexGrow: 1, }}

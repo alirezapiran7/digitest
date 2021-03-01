@@ -20,9 +20,10 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: color.grey100,
+        backgroundColor: color.grey300,
         borderRadius: 8,
         marginHorizontal: 8,
+        marginTop:8,
         paddingHorizontal: 16,
         height: 45
     },
