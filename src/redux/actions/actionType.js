@@ -21,6 +21,6 @@ export const END_LOADING = 'END_LOADING'
 
 //util
 
-export const CLEAR_STATE = 'CLEAR_STATE'
+export const UPDATE_STATE = 'UPDATE_STATE'
 
 

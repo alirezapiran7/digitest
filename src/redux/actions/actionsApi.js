@@ -5,14 +5,13 @@ import {
     API_DELETE,
     API_PATCH,
     API_PUT,
-    CLEAR_STATE
+    UPDATE_STATE
 } from './actionType';
 
 import { urls } from '../../constants';
 import { disMis, endLoading, globalEndLoading, globalStartLoading, showAlert, startLoading } from './actionsModal';
 import { logout } from './actionsAuth';
 import axios from 'axios';
-import { Alert } from 'react-native';
 
 export const Get = ({ url, result, isLoading }) => async dispatch => {
 
@@ -27,21 +26,21 @@ export const Get = ({ url, result, isLoading }) => async dispatch => {
             headers: { 'Accept': 'application/json', 'Authorization': 'Token ' + token },
         });
 
-        console.log("get movies", res.data);
+        console.log("General Get", res.data);
         return dispatch({
             type: API_GET,
             value: res.data.results,
             result: result
         })
     } catch (err) {
-        console.log('error inja');
+        console.log('error');
         console.log(err.message);
 
-        if (err.response != null && err.response.status == '401') {
-            dispatch(logout())
-        } else {
+        // if (err.response != null && err.response.status == '401') {
+        //     dispatch(logout())
+        // } else {
             dispatch(showAlert({ action: () => dispatch(disMis()), title: err.message }))
-        }
+        // }
 
     } finally {
         dispatch(globalEndLoading())
@@ -53,49 +52,46 @@ export const GetOne = ({ url, result, isLoading }) => async dispatch => {
         if (isLoading) dispatch(globalStartLoading())
 
         const token = await AsyncStorage.getItem("token")
-        console.log(token);
         const res = await axios({
             method: 'GET',
             url: url,
             headers: { 'Accept': 'application/json', 'Authorization': 'Token ' + token },
         });
 
-        console.log("get movies", res.data);
+        console.log("General Get One", res.data);
         return dispatch({
             type: API_GET,
             value: res.data,
             result: result
         })
     } catch (err) {
-        console.log('error inja');
+        console.log('error');
         console.log(err.message);
 
-        if (err.response != null && err.response.status == '401') {
-            dispatch(logout())
-        } else {
+        // if (err.response != null && err.response.status == '401') {
+        //     dispatch(logout())
+        // } else {
             dispatch(showAlert({ action: () => dispatch(disMis()), title: err.message }))
-        }
+        // }
 
     } finally {
         dispatch(globalEndLoading())
     }
 }
-
 export const Create = ({ url, data, result, isLoading }) => async dispatch => {
 
     try {
         if (isLoading) dispatch(startLoading())
 
         const token = await AsyncStorage.getItem('token')
-        console.log("send data", token, data);
         const res = await axios({
             method: 'post',
             url: url,
-            headers: { 'Accept': 'application/json', 'Authorization': 'Token ' + token },
+            headers: { 'Accept': 'application/json','Content-Type':'application/json', 'Authorization': 'Token ' + token },
             data: data
         });
 
-        console.log('generalCreate');
+        console.log('General Create');
         console.log(res.data);
 
         return dispatch({
@@ -104,7 +100,7 @@ export const Create = ({ url, data, result, isLoading }) => async dispatch => {
             result: result
         })
     } catch (err) {
-        console.log('error inja');
+        console.log('error');
         console.log(err.message);
 
         // if (err.response != null && err.response.status == '401') {
@@ -116,63 +112,53 @@ export const Create = ({ url, data, result, isLoading }) => async dispatch => {
         dispatch(endLoading())
     }
 }
-
-export const Patch = ({ model, id, data, result, isLoading }) => async dispatch => {
+export const Patch = ({ url, data, result, isLoading }) => async dispatch => {
 
     try {
-        let url = urls.baseApi + model
-        if (id) url += '/' + id
-
         if (isLoading) dispatch(globalStartLoading())
 
         const token = await AsyncStorage.getItem('token')
+        
         const res = await axios({
-            method: 'patch',
+            method: 'PATCH',
             url: url,
-            headers: { 'Accept': 'application/json', 'token': token },
+            headers: { 'Accept': 'application/json','Content-Type':'application/json', 'Authorization': 'Token ' + token },
             data: data
         });
 
-        console.log('generalCreate');
-        console.log(res.data);
-
+        console.log('General Patch');
         return dispatch({
             type: API_PATCH,
             value: res.data,
             result: result
         })
     } catch (err) {
-        console.log('error inja');
+        console.log('error');
         console.log(err.message);
 
-        if (err.response != null && err.response.status == '401') {
-            dispatch(logout())
-        } else {
-            dispatch(showAlert({ action: () => dispatch(disMis()), title: err.message }))
-        }
+        // if (err.response != null && err.response.status == '401') {
+        //     dispatch(logout())
+        // }
+        dispatch(showAlert({ action: () => dispatch(disMis()), title: err.message }))
 
     } finally {
         dispatch(globalEndLoading())
     }
 }
-
-export const Put = ({ model, id, data, result, isLoading }) => async dispatch => {
+export const Put = ({url, data, result, isLoading }) => async dispatch => {
 
     try {
-        let url = urls.baseApi + model
-        if (id) url += '/' + id
-
-        if (isLoading) dispatch(globalStartLoading())
+        if (isLoading) dispatch(startLoading())
 
         const token = await AsyncStorage.getItem('token')
         const res = await axios({
             method: 'put',
             url: url,
-            headers: { 'Accept': 'application/json', 'token': token },
+            headers: { 'Accept': 'application/json','Content-Type':'application/json', 'Authorization': 'Token ' + token },
             data: data
         });
 
-        console.log('generalCreate');
+        console.log('General Put');
         console.log(res.data);
 
         return dispatch({
@@ -181,63 +167,56 @@ export const Put = ({ model, id, data, result, isLoading }) => async dispatch =>
             result: result
         })
     } catch (err) {
-        console.log('error inja');
+        console.log('error' );
         console.log(err.message);
-
-        if (err.response != null && err.response.status == '401') {
-            dispatch(logout())
-        } else {
+        // if (err.response != null && err.response.status == '401') {
+        //     dispatch(logout())
+        // } else {
             dispatch(showAlert({ action: () => dispatch(generalGet(disMis())), title: err.message }))
-        }
+        // }
 
     } finally {
-        dispatch(globalEndLoading())
+        dispatch(endLoading())
     }
 }
-
-export const Delete = ({ model, id, result, isLoading }) => async dispatch => {
+export const Delete = ({url, result, isLoading }) => async dispatch => {
 
     try {
-        let url = urls.baseApi + model
-        if (id) url += '/' + id
-
         if (isLoading) dispatch(globalStartLoading())
 
         const token = await AsyncStorage.getItem('token')
         const res = await axios({
             method: 'delete',
             url: url,
-            headers: { 'Accept': 'application/json', 'token': token }
+            headers: { 'Accept': 'application/json','Content-Type':'application/json', 'Authorization': 'Token ' + token },
         });
 
-        console.log('delete');
+        console.log('General Delete');
         console.log(res.data);
 
         return dispatch({
-            type: API_DELETE,
-            value: res.data,
+            type: API_PUT,
+            value: true,
             result: result
         })
     } catch (err) {
-        console.log('error inja');
+        console.log('error' );
         console.log(err.message);
-
-        if (err.response != null && err.response.status == '401') {
-            dispatch(logout())
-        } else {
+        // if (err.response != null && err.response.status == '401') {
+        //     dispatch(logout())
+        // } else {
             dispatch(showAlert({ action: () => dispatch(generalGet(disMis())), title: err.message }))
-        }
+        // }
 
     } finally {
         dispatch(globalEndLoading())
     }
 }
-
-export const ClearState = ({ key, value }) => async dispatch => {
+export const updateState = ({ key, value }) => async dispatch => {
 
     return (dispatch(
         {
-            type: CLEAR_STATE,
+            type: UPDATE_STATE,
             key: key,
             value: value
         }

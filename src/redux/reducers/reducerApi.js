@@ -1,6 +1,6 @@
 /** Redux Actions */
 import {
-  API_CREATE,API_DELETE,API_GET,API_PATCH,API_PUT , CLEAR_STATE
+  API_CREATE,API_DELETE,API_GET,API_PATCH,API_PUT , UPDATE_STATE
 } from '../actions/actionType';
 
 const initialState = {
@@ -18,7 +18,7 @@ export default (state = initialState, action) => {
         [action.result]: action.value
       };
 
-      case CLEAR_STATE:
+      case UPDATE_STATE:
       return {
         ...state,
         [action.key]: action.value
