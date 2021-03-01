@@ -8,9 +8,13 @@ const Header = ({ navigation, title, rightButton }) => {
 
     const insests = useSafeAreaInsets()
     return (
-        <View style={{ height: insests.top + 50, paddingTop: insests.top, backgroundColor: color.white ,justifyContent:'space-between',flexDirection:'row',alignItems:'center'}}>
+        <View style={{height: insests.top + 50, paddingTop: insests.top,backgroundColor: color.white,
+            justifyContent: 'space-between',
+            flexDirection: 'row',
+            alignItems: 'center'
+        }}>
 
-            <View style={{marginHorizontal:16}}>
+            <View style={{ marginHorizontal: 16 }}>
                 <TouchableOpacity onPress={() => {
                     navigation.goBack()
 
@@ -20,11 +24,11 @@ const Header = ({ navigation, title, rightButton }) => {
             </View>
 
             <View>
-                <Text style={{fontSize:18}}>{title}</Text>
+                <Text style={{ fontSize: 18 }}>{title}</Text>
             </View>
 
-            <View style={{marginHorizontal:16}}>
-                {rightButton?rightButton():null}
+            <View style={{ marginHorizontal: 16 }}>
+                {rightButton ? rightButton() : null}
             </View>
         </View>
     )
@@ -32,4 +36,12 @@ const Header = ({ navigation, title, rightButton }) => {
 
 export default Header
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+    header: {
+       
+        backgroundColor: color.white,
+        justifyContent: 'space-between',
+        flexDirection: 'row',
+        alignItems: 'center'
+    }
+})

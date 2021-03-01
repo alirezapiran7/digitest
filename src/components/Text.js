@@ -2,7 +2,6 @@ import React, { FunctionComponent } from 'react'
 import {
   Text,
   StyleSheet,
-  ViewPropTypes,
   TextPropTypes
 } from 'react-native'
 import PropTypes from 'prop-types';

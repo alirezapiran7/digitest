@@ -3,7 +3,7 @@ import { ActivityIndicator, StyleSheet, Text, View, TouchableWithoutFeedback } f
 import Navigation from './navigation'
 import Modal from 'react-native-modal'
 import { useSelector, useDispatch } from 'react-redux'
-import { color } from './constants'; 
+import { color } from './constants';
 import { clearModal, disMis } from './redux/actions/actionsModal'
 
 const index = () => {
@@ -26,13 +26,11 @@ const index = () => {
                 animationIn={'fadeIn'}
                 statusBarTranslucent={true}
                 isVisible={isVisible}
-                
+
                 customBackdrop={
                     <TouchableWithoutFeedback onPress={() => {
-                       
-                            dispatch(disMis())
+                        dispatch(disMis())
                     }}>
-
                         <View style={{ backgroundColor: transparent ? color.transparent : color.transparentBlackHard, flex: 1 }}></View>
 
                     </TouchableWithoutFeedback>
@@ -46,20 +44,8 @@ const index = () => {
             </Modal>
 
             <Navigation />
-            
-            {isLoading && <ActivityIndicator animating={isLoading}
-                size={'large'}
-                style={{
-                    width: 50,
-                    height: 50,
-                    position: "absolute",
-                    top: '50%',
-                    end: '50%',
-                    marginTop: -25,
-                    marginEnd: -25,
-                    justifyContent: 'center',
-                    alignItems: 'center'
-                }} />}
+
+            {isLoading && <ActivityIndicator animating={isLoading}size={'large'}style={styles.loading} />}
 
         </View>
     )
@@ -67,4 +53,16 @@ const index = () => {
 
 export default index
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+    loading: {
+        width: 50,
+        height: 50,
+        position: "absolute",
+        top: '50%',
+        end: '50%',
+        marginTop: -25,
+        marginEnd: -25,
+        justifyContent: 'center',
+        alignItems: 'center'
+    }
+})

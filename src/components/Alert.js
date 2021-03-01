@@ -2,24 +2,26 @@ import React, { useEffect } from 'react'
 import { StyleSheet, View, TouchableOpacity } from 'react-native'
 import { color, metrics } from '../constants'
 import Text from './Text'
-import { useDispatch } from 'react-redux'
-import { disMis } from '../redux/actions/actionsModal'
+import {  useDispatch } from 'react-redux'
+import { clearModal, disMis } from '../redux/actions/actionsModal'
 
 
 
 
 
 const Alert = (props) => {
+
     const dispatch = useDispatch();
+
     const modalButton = (title, action) => {
         return (
 
             <TouchableOpacity style={{ borderRadius: metrics.s8, backgroundColor: color.tint, width: 80, height: 40, marginTop: metrics.s8, marginEnd: metrics.s16, justifyContent: 'center', alignItems: 'center' }}
                 onPress={async () => {
-
+                 
                     dispatch(disMis())
-                    action()
-
+                      action()
+                  
                 }}>
                 <Text style={{ fontSize: 14, color: color.white }}>
                     {title}
@@ -41,7 +43,7 @@ const Alert = (props) => {
             <Text style={{ color: color.text, fontSize: 16, textAlign: 'center', marginTop: metrics.s16, }}>
                 {props.title}
             </Text>
-            <Text style={{ color: color.text, fontSize: 14, textAlign: 'center', marginVertical: metrics.s16, }}>
+           <Text style={{ color: color.text, fontSize: 14, textAlign: 'center', marginVertical: metrics.s16, }}>
                 {props.message}
             </Text>
             <View style={{ alignSelf: 'flex-end', flexDirection: 'row' }}>
@@ -56,6 +58,8 @@ const Alert = (props) => {
         </View>
     )
 }
+
+
 
 export default Alert
 

@@ -8,7 +8,6 @@ import {
     UPDATE_STATE
 } from './actionType';
 
-import { urls } from '../../constants';
 import { disMis, endLoading, globalEndLoading, globalStartLoading, showAlert, startLoading } from './actionsModal';
 import { logout } from './actionsAuth';
 import axios from 'axios';
@@ -96,7 +95,7 @@ export const Create = ({ url, data, result, isLoading }) => async dispatch => {
 
         return dispatch({
             type: API_CREATE,
-            value: res.data,
+            value: true,
             result: result
         })
     } catch (err) {
@@ -195,7 +194,7 @@ export const Delete = ({url, result, isLoading }) => async dispatch => {
         console.log(res.data);
 
         return dispatch({
-            type: API_PUT,
+            type: API_DELETE,
             value: true,
             result: result
         })

@@ -1,5 +1,5 @@
 import React from 'react';
-import { TouchableOpacity, StyleSheet, ActivityIndicator, ColorPropType, Image } from 'react-native';
+import { TouchableOpacity, StyleSheet, ActivityIndicator, } from 'react-native';
 import { color, metrics } from '../constants';
 import Text from './Text'
 
@@ -9,7 +9,7 @@ export const Button = ({ buttonTitle, isLoading, style, onPress }) => {
     return (
         <TouchableOpacity style={[styles.continer, { ...style }]} disabled={isLoading}
             onPress={onPress}>
-            <Text style={styles.solidText}>{buttonTitle}</Text>
+            <Text style={{color:color.white,fontSize:18}}>{buttonTitle}</Text>
             {isLoading && <ActivityIndicator style={{ flex: 1, width: '100%', height: '100%', position: 'absolute', backgroundColor: color.transparentWhite }}
                 color={ color.tint} />}
         </TouchableOpacity>

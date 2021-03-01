@@ -3,9 +3,9 @@ import { Alert, FlatList, KeyboardAvoidingView, ScrollView, StyleSheet, Text, To
 import Header from '../../components/Header'
 import { color, urls } from '../../constants'
 import { FormInput } from '../../components/Input'
-import { Get, Create, GetOne, Put, Patch } from '../../redux/actions/actionsApi'
+import { Get, Create, GetOne, Put, Patch, updateState } from '../../redux/actions/actionsApi'
 import { useDispatch, useSelector } from 'react-redux'
-import { ChoicesItem } from '../../components/ListItem'
+import { ChoiceList, ChoicesItem } from '../../components/ListItem'
 import { Button } from '../../components/Button'
 import { disMis, showAlert } from '../../redux/actions/actionsModal'
 import DatePicker from '@react-native-community/datetimepicker'
@@ -27,36 +27,44 @@ const editMovie = ({ navigation, route }) => {
     const [selectedDirector, setSelectedDirector] = useState({})
     const [selectedCategory, setSelectedCategory] = useState([])
     const [selectedCast, setSelectedCast] = useState([])
-    const [selectedlanguages, setSelectedlanguages] = useState("")
-    const [selectedCountry, setSelectedCountry] = useState("")
-    const [title, setTitle] = useState("")
+    const [selectedlanguages, setSelectedlanguages] = useState({})
+    const [selectedCountry, setSelectedCountry] = useState({})
+    const [title, setTitle] = useState({})
     const [show, setShow] = useState(false)
     const [date, setDate] = useState(new Date())
 
 
 
-    const languages = ["hindi", "english"]
-    const countreis = ["IND", "USA", "AUS"]
+    const languages = [{ id: 1, name: "hindi" }, { id: 2, name: "english" }]
+    const countreis = [{ id: 1, name: "IND" }, { id: 2, name: "USA" }, { id: 3, name: "AUS" }]
 
     const dispatch = useDispatch()
 
+    useEffect(() => {
+
+        if (updated === true) {
+            Alert.alert("Updated Movie")
+            dispatch(Get({ url: urls.movies, result: 'movies', isLoading: true }))
+            navigation.goBack()
+            dispatch(updateState({ key: `movie_update_${movieId}`, value: false }))
+        }
+        return () => { }
+    }, [updated])
 
     useEffect(() => {
-       
+
         dispatch(GetOne({ url: urls.movies + movieId, result: `movie_${movieId}`, isLoading: true }))
-
-        dispatch(Get({ url: urls.baseApi + "person?categories=actor", result: 'personActor' }))
-
-        dispatch(Get({ url: urls.baseApi + "person?categories=director", result: 'personDirector' }))
-
-        dispatch(Get({ url: urls.category, result: 'category' }))
-
+        if (!personActor || personActor.length === 0)
+            dispatch(Get({ url: urls.baseApi + "person?categories=actor", result: 'personActor' }))
+        if (!personDirector || personDirector.length === 0)
+            dispatch(Get({ url: urls.baseApi + "person?categories=director", result: 'personDirector' }))
+        if (!category || category.length === 0)
+            dispatch(Get({ url: urls.category, result: 'category' }))
         return () => {
         }
     }, [])
 
     useEffect(() => {
-        console.log("edit movie", movie);
         if (movie && movie.id) {
             if (movie?.title)
                 setTitle(movie.title)
@@ -67,20 +75,20 @@ const editMovie = ({ navigation, route }) => {
             if (movie?.date_of_release)
                 setDate(new Date(movie?.date_of_release))
 
-            if (movie?.country)
-                setSelectedCountry(movie?.country)
+            if (movie?.country) {
+                const lan = countreis.find(item => item.name == movie?.country)
+                setSelectedCountry(lan)
+            }
 
-            if (movie?.language)
-                setSelectedlanguages(movie?.language)
-
+            if (movie?.language) {
+                const lan = languages.find(item => item.name == movie?.language)
+                setSelectedlanguages(lan)
+            }
             if (movie?.cast) {
                 const arr = movie?.cast.map(item => {
-
                     const spl = item.split(":")
-
                     return { id: parseInt(spl[0]), name: spl[1] }
                 })
-                console.log("splcasting", arr);
                 setSelectedCast([...selectedCast, ...arr])
             }
             if (movie?.tags && category?.length > 0) {
@@ -105,22 +113,21 @@ const editMovie = ({ navigation, route }) => {
     }, [category])
 
     useEffect(() => {
-        console.log("updated",updated);
-        Alert.alert("updated")
-        return () => {}
+        console.log("updated", updated);
+
+        return () => { }
     }, [updated])
-
-
-
 
     const onChange = (event, selectedDate) => {
         const currentDate = selectedDate || date;
         setShow(false);
         setDate(currentDate);
         console.log("selected date", selectedDate);
-        dispatch(Patch({ url: urls.movies + movieId ,
-             data: { date_of_release: DateFormat(date, "yyyy-mm-dd")},
-             result:`movie_update_${movieId}`,isLoading: true }))
+        dispatch(Patch({
+            url: urls.movies + movieId,
+            data: { date_of_release: DateFormat(date, "yyyy-mm-dd") },
+            result: `movie_update_${movieId}`, isLoading: true
+        }))
     };
 
 
@@ -144,10 +151,10 @@ const editMovie = ({ navigation, route }) => {
         if (selectedCast.length === 0)
             return dispatch(showAlert({ action: () => dispatch(disMis()), title: "select cast" }))
 
-        if (selectedlanguages === "")
+        if (!selectedlanguages.id)
             return dispatch(showAlert({ action: () => dispatch(disMis()), title: "select Language" }))
 
-        if (selectedCountry === "")
+        if (!selectedCountry.id)
             return dispatch(showAlert({ action: () => dispatch(disMis()), title: "select Country" }))
 
         if (selectedCategory.length === 0)
@@ -158,13 +165,13 @@ const editMovie = ({ navigation, route }) => {
         const data = {
             title: title,
             date_of_release: DateFormat(date, "yyyy-mm-dd"),
-            country: selectedCountry,
+            country: selectedCountry.name,
             tags: tagsId,
-            language: selectedlanguages,
+            language: selectedlanguages.name,
             cast: castId,
             director: selectedDirector.id
         }
-        dispatch(Put({ url: urls.movies + movieId , data: data, isLoading: true }))
+        dispatch(Put({ url: urls.movies + movieId, data: data, isLoading: true }))
     }
 
     return (
@@ -172,106 +179,7 @@ const editMovie = ({ navigation, route }) => {
             <Header navigation={navigation} title={"Edit Movie"} />
 
             {!isGlobalLoading && <ScrollView >
-                <FormInput placeHolder={"title"} lableValue={title} onChange={(value) => setTitle(value)} />
-
-                <View style={{ marginTop: 16 }}>
-                    <Text style={{ marginHorizontal: 16, fontSize: 18, alignSelf: 'center' }}>Director</Text>
-                    <FlatList
-                        data={personDirector}
-                        style={{ marginVertical: 8 }}
-                        horizontal
-                        showsHorizontalScrollIndicator={false}
-                        keyExtractor={item => item.id.toString()}
-                        renderItem={({ item }) => {
-                            const isSelected = item.id == selectedDirector.id
-                            return (<ChoicesItem text={item.full_name} isSelected={isSelected} onPress={() => {
-                                setSelectedDirector(item)
-                            }} />)
-
-                        }} />
-                </View>
-
-                <View style={{ marginTop: 16 }}>
-                    <Text style={{ marginHorizontal: 16, fontSize: 18, alignSelf: 'center' }}>Cast</Text>
-                    <FlatList
-                        data={personActor ? personActor : []}
-                        style={{ marginVertical: 8 }}
-                        horizontal
-                        showsHorizontalScrollIndicator={false}
-                        keyExtractor={item => item.id.toString()}
-                        renderItem={({ item }) => {
-                            const isSelected = isSelectedCast(item)
-                            return (<ChoicesItem text={item.full_name} isSelected={isSelected} onPress={() => {
-                                if (isSelectedCast(item)) {
-                                    const newArr = selectedCast.filter(arr => arr.id !== item.id)
-                                    setSelectedCast([...newArr])
-                                } else {
-                                    console.log("add to categoru");
-                                    setSelectedCast([...selectedCast, item])
-                                }
-
-                            }} />)
-
-                        }} />
-                </View>
-
-
-                <View style={{ marginTop: 16 }}>
-                    <Text style={{ marginHorizontal: 16, fontSize: 18, alignSelf: 'center' }}>language</Text>
-                    <FlatList
-                        data={languages}
-                        style={{ marginVertical: 8 }}
-                        horizontal
-                        showsHorizontalScrollIndicator={false}
-                        renderItem={({ item }) => {
-                            const isSelected = item == selectedlanguages
-                            return (<ChoicesItem text={item} isSelected={isSelected} onPress={() => {
-                                setSelectedlanguages(item)
-                            }} />)
-
-                        }} />
-                </View>
-
-                <View style={{ marginTop: 16 }}>
-                    <Text style={{ marginHorizontal: 16, fontSize: 18, alignSelf: 'center' }}>Country</Text>
-                    <FlatList
-                        data={countreis}
-                        style={{ marginVertical: 8 }}
-                        horizontal
-                        showsHorizontalScrollIndicator={false}
-                        renderItem={({ item }) => {
-                            const isSelected = item == selectedCountry
-                            return (<ChoicesItem text={item} isSelected={isSelected} onPress={() => {
-                                setSelectedCountry(item)
-                            }} />)
-
-                        }} />
-                </View>
-
-
-                <View style={{ marginTop: 16 }}>
-                    <Text style={{ marginHorizontal: 16, fontSize: 18, alignSelf: 'center' }}>Tags</Text>
-                    <FlatList
-                        data={category ? category : []}
-                        style={{ marginVertical: 8 }}
-                        horizontal
-                        showsHorizontalScrollIndicator={false}
-                        keyExtractor={item => item.id.toString()}
-                        renderItem={({ item }) => {
-                            const isSelected = isSelectedCategory(item)
-                            return (<ChoicesItem text={item.name} isSelected={isSelected} onPress={() => {
-                                if (isSelectedCategory(item)) {
-                                    const newArr = selectedCategory.filter(arr => arr.id !== item.id)
-                                    setSelectedCategory([...newArr])
-                                } else {
-                                    console.log("add to categoru");
-                                    setSelectedCategory([...selectedCategory, item])
-                                }
-
-                            }} />)
-
-                        }} />
-                </View>
+                <FormInput icon="pen" placeHolder={"title"} lableValue={title} onChange={(value) => setTitle(value)} />
 
                 {show && <DatePicker
                     testID="dateTimePicker"
@@ -280,6 +188,55 @@ const editMovie = ({ navigation, route }) => {
                     display="default"
                     onChange={onChange}
                 />}
+
+                <ChoiceList title="Director" list={personDirector} renderItem={(item) => {
+                    const isSelected = item.id == selectedDirector.id
+                    return (<ChoicesItem text={item.full_name} isSelected={isSelected} onPress={() => {
+                        setSelectedDirector(item)
+                    }} />)
+                }} />
+
+                <ChoiceList title="Cast" list={personActor ? personActor : []} renderItem={(item) => {
+                    const isSelected = isSelectedCast(item)
+                    return (<ChoicesItem text={item.full_name} isSelected={isSelected} onPress={() => {
+                        if (isSelectedCast(item)) {
+                            const newArr = selectedCast.filter(arr => arr.id !== item.id)
+                            setSelectedCast([...newArr])
+                        } else {
+                            setSelectedCast([...selectedCast, item])
+                        }
+
+                    }} />)
+                }} />
+
+                <ChoiceList title="Language" list={languages} renderItem={(item) => {
+                    const isSelected = item.id === selectedlanguages.id
+                    return (<ChoicesItem text={item.name} isSelected={isSelected} onPress={() => {
+                        setSelectedlanguages(item)
+                    }} />)
+                }} />
+
+                <ChoiceList title="Country" list={countreis} renderItem={(item) => {
+                    const isSelected = item.id === selectedCountry.id
+                    return (<ChoicesItem text={item.name} isSelected={isSelected} onPress={() => {
+                        setSelectedCountry(item)
+                    }} />)
+                }} />
+
+
+                <ChoiceList title="Tags" list={category ? category : []} renderItem={(item) => {
+                    const isSelected = isSelectedCategory(item)
+                    return (<ChoicesItem text={item.name} isSelected={isSelected} onPress={() => {
+                        if (isSelectedCategory(item)) {
+                            const newArr = selectedCategory.filter(arr => arr.id !== item.id)
+                            setSelectedCategory([...newArr])
+                        } else {
+                            setSelectedCategory([...selectedCategory, item])
+                        }
+
+                    }} />)
+                }} />
+
                 <Button style={{ marginTop: 16, marginHorizontal: 8 }}
                     buttonTitle={DateFormat(date, "yyyy-mm-dd")} onPress={() => {
                         setShow(true)

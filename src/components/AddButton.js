@@ -1,11 +1,11 @@
-import React, { useState, useRef } from 'react';
-import { StyleSheet, View, TouchableOpacity, Image, Alert, Animated } from "react-native";
-import { color, strings, metrics } from '../constants';
+import React from 'react';
+import { StyleSheet, View, TouchableOpacity } from "react-native";
+import { color, metrics } from '../constants';
 import { useDispatch } from 'react-redux'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { IconX, ICON_TYPE } from '../icons';
 import Text from './Text'
-import { clearModal, disMis, showModal } from '../redux/actions/actionsModal';
+import { disMis, showModal } from '../redux/actions/actionsModal';
 
 
 export default AddButton = ({ navigation }) => {
@@ -32,11 +32,9 @@ export default AddButton = ({ navigation }) => {
 
             <View style={{ position: 'absolute', width: '100%', height: 60, flexDirection: 'row', bottom: 60 + insets.bottom }}>
                 <Buttons title={'New Movie'} icon={'film'} onPress={() => {
-                    // dispatch(setOrderType(orderTypes.dine_in))
-                     navigation.navigate("newMovie")
+                    navigation.navigate("newMovie")
                 }} />
                 <Buttons title={'New Person'} icon={'users'} onPress={() => {
-                    // dispatch(setOrderType(orderTypes.collection))
                     navigation.navigate("newPerson")
                 }} />
             </View>
