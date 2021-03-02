@@ -69,7 +69,7 @@ const persons = ({ navigation }) => {
                         <Text numberOfLines={1} ellipsizeMode='tail' style={{ flex: 1, fontSize: 16, fontWeight: 'bold' }}>{item.full_name}</Text>
                         <TouchableOpacity style={{ width: 30, height: 30, alignItems: 'center', justifyContent: 'center', marginHorizontal: 4 }}
                             onPress={() => {
-                                navigation.navigate("editMovie", { movieId: item.id })
+                                navigation.navigate("editPerson", { personId: item.id })
                             }}>
                             <IconX name={"edit"} color={color.tint} />
                         </TouchableOpacity>
