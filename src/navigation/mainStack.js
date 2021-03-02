@@ -6,6 +6,7 @@ import search from '../screens/main/search'
 import newMovie from '../screens/main/newMovie'
 import newPerson from '../screens/main/newPerson'
 import editMovie from '../screens/main/editMovie'
+import newCategory from '../screens/main/newCategory'
 
 
 const Stack = createStackNavigator()
@@ -18,6 +19,7 @@ const mainStack = ({ navigation }) => {
             <Stack.Screen name={"newMovie"} component={newMovie} options={{ headerShown: false }} />
             <Stack.Screen name={"newPerson"} component={newPerson} options={{ headerShown: false }} />
             <Stack.Screen name={"editMovie"} component={editMovie} options={{ headerShown: false }} />
+            <Stack.Screen name={"newCategory"} component={newCategory} options={{ headerShown: false }} />
         </Stack.Navigator>
     )
 }

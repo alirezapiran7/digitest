@@ -9,5 +9,6 @@ export default urls = {
     user: BASE_API + 'user/',
     movies: BASE_API + 'movie/',
     category: BASE_API + 'category/',
+    persons: BASE_API + "person/",
 }
 

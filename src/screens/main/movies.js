@@ -125,7 +125,7 @@ const movies = ({ navigation }) => {
     return (
         <View style={[styles.continer, { paddingTop: insets.top }]}>
 
-            <Search value={searchText} onChange={(value) => { setSearchText(value) }} filterButton={() => {
+            <Search value={searchText}placeHolder={"Search Movie"} onChange={(value) => { setSearchText(value) }} filterButton={() => {
                 setShowFilter(!showFilter)
             }} />
 

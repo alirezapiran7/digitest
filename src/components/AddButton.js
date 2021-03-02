@@ -34,6 +34,9 @@ export default AddButton = ({ navigation }) => {
                 <Buttons title={'New Movie'} icon={'film'} onPress={() => {
                     navigation.navigate("newMovie")
                 }} />
+                 <Buttons title={'New Category'} icon={'clipboard-list'} onPress={() => {
+                    navigation.navigate("newCategory")
+                }} />
                 <Buttons title={'New Person'} icon={'users'} onPress={() => {
                     navigation.navigate("newPerson")
                 }} />
